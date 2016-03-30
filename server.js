@@ -15,15 +15,14 @@ app.use(express.static(__dirname + '/public'));
 
 // our database is an array for now with some hardcoded values
 var todos = [
-  // { _id: 1, task: 'Laundry', description: 'Wash clothes' },
-  // { _id: 2, task: 'Grocery Shopping', description: 'Buy dinner for this week' },
-  // { _id: 3, task: 'Homework', description: 'Make this app super awesome!' }
+   { _id: 1, task: 'Laundry', description: 'Wash clothes' },
+   { _id: 2, task: 'Grocery Shopping', description: 'Buy dinner for this week' },
+   { _id: 3, task: 'Homework', description: 'Make this app super awesome!' }
 ];
 
 /**********
  * ROUTES *
  **********/
-
 /*
  * HTML Endpoints
  */
@@ -52,18 +51,34 @@ app.get('/api/todos/search', function search(req, res) {
 app.get('/api/todos', function index(req, res) {
   /* This endpoint responds with all of the todos
    */
+   res.json(200, {todos: todos});
 });
 
 app.post('/api/todos', function create(req, res) {
   /* This endpoint will add a todo to our "database"
    * and respond with the newly created todo.
    */
+
+   var newTask = req.body.task;
+   var newDescription = req.body.description;
+   var newId = todos.length+1;
+   var newObject = { _id: newId, task: newTask, description: newDescription};
+   todos.push(newObject);
+   res.status(200).json(newObject);
 });
 
 app.get('/api/todos/:id', function show(req, res) {
   /* This endpoint will return a single todo with the
    * id specified in the route parameter (:id)
    */
+   var id = parseInt(req.params.id);
+   console.log(id);
+   var theRightOne;
+    for (var i = 0; i < todos.length; i++) {
+      if(todos[i]._id === id);
+        theRightOne = todos[i];
+      }
+    res.status(200).json(theRightOne);
 });
 
 app.put('/api/todos/:id', function update(req, res) {
@@ -71,6 +86,15 @@ app.put('/api/todos/:id', function update(req, res) {
    * id specified in the route parameter (:id) and respond
    * with the newly updated todo.
    */
+   var id = parseInt(req.params.id);
+   console.log(id);
+
+    for (var i = 0; i < todos.length; i++) {
+      if(todos[i]._id === id);
+        todos[i];
+      }
+      
+   res.status(200).json
 });
 
 app.delete('/api/todos/:id', function destroy(req, res) {
